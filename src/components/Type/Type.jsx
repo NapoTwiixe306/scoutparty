@@ -24,7 +24,7 @@ const PartyType = ({ type }) => {
     default:
       label = 'Inconnu';
       labelColor = 'black';
-      icon = '';
+      icon = 'question';
   }
 
   return (
