@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center', // Aligne verticalement
+    justifyContent: 'center', 
     padding: 10,
     marginVertical: 5,
     width: 125,
