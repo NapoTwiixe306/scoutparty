@@ -7,24 +7,21 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/FontAwesome";
+
 export default function TopBar() {
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <TouchableOpacity >
-          
-        </TouchableOpacity>
-
-        <View style={styles.dateContainer}>
-          <Text style={styles.dateText}>Today's Date</Text>
+        <View style={styles.logoContainer}>
+          {/* Logo component if any */}
         </View>
-
-        <TouchableOpacity style={styles.logoContainer}>
-            <Icon name="menu" size={30} color="white" />
-        </TouchableOpacity>
+        <View style={styles.dateContainer}>
+          <Text style={styles.dateText}>Adresse</Text>
+            <Icon name="pencil" size={20} color="white" />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -46,11 +43,14 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   dateContainer: {
-    flex: 2,
+    flex: 1,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   dateText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
+    marginRight: 18,
   },
 });
