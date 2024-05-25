@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 const PartyType = ({ type }) => {
   let label, labelColor, icon;
 
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center', // Aligne verticalement
     padding: 10,
     marginVertical: 5,
     width: 125,
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     top: -10
   },
   icon: {
-    marginRight: 5,
+    marginRight: 15,
   },
   label: {
     fontWeight: 'bold',

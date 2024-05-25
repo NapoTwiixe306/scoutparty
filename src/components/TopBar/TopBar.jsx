@@ -30,6 +30,7 @@ export default function TopBar() {
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: "#2B3639",
+    height: 90
   },
   container: {
     flexDirection: "row",
