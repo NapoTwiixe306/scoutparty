@@ -1,57 +1,70 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View, Button, KeyboardAvoidingView } from 'react-native';
-import { FIREBASE_AUTH } from '../../FirebaseConfig';
-import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator, StyleSheet, View, Button, KeyboardAvoidingView, Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigation } from '@react-navigation/native';
+
+import axios from 'axios';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const auth = FIREBASE_AUTH;
     const navigation = useNavigation();
+    const signUp = async () => {
+        if (!email || !password) {
+            Alert.alert('Error', 'Email and password are required.');
+            return;
+        }
+        setLoading(true);
+        try {
+            const response = await axios.post('http://192.168.0.20:5000/signup', { email, password }, { timeout: 10000 });
+            setLoading(false);
+        } catch (error) {
+            console.error('Error during sign up:', error);
+            setLoading(false);
+            if (error.code === 'ECONNABORTED') {
+                Alert.alert('Error', 'Request timed out. Please try again.');
+            } else {
+                Alert.alert('Error', 'Failed to sign up. Please try again.');
+            }
+        }
+    };
 
     const signIn = async () => {
+        if (!email || !password) {
+            Alert.alert('Error', 'Email and password are required.');
+            return;
+        }
         setLoading(true);
         try {
-            const response = await signInWithEmailAndPassword(auth, email, password);
-            console.log(response);
+            const response = await axios.post('http://192.168.0.20:5000/signin', { email, password }, { timeout: 10000 });
+            setLoading(false);
             navigation.navigate('Home');
         } catch (error) {
-            console.log(error);
-            alert("Sign in failed: " + error.message);
-        } finally {
+            console.error('Error during sign in:', error);
             setLoading(false);
+            if (error.code === 'ECONNABORTED') {
+                Alert.alert('Error', 'Request timed out. Please try again.');
+            } else {
+                Alert.alert('Error', 'Failed to sign in. Please try again.');
+            }
         }
-    }
+    };
 
-    const signUp = async () => {
+    const logout = async () => {
         setLoading(true);
         try {
-            const response = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(response);
-        } catch (error) {
-            console.log(error);
-            alert("Sign up failed: " + error.message);
-        } finally {
+            // Envoyer une requête de déconnexion au serveur
+            await axios.post('http://192.168.0.20:5000/logout');
             setLoading(false);
-        }
-    }
-
-    const signOut = async () => {
-        setLoading(true);
-        try {
-            await FIREBASE_AUTH.signOut();
+            // Rediriger vers l'écran de connexion
             navigation.navigate('Home');
         } catch (error) {
-            console.log(error);
-            alert("Sign out failed: " + error.message);
-        } finally {
+            console.error('Error during logout:', error);
             setLoading(false);
+            Alert.alert('Error', 'Failed to log out. Please try again.');
         }
-    }
-
+    };
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView behavior='padding'>
@@ -70,15 +83,12 @@ export default function Login() {
                     onChangeText={(text) => setPassword(text)}
                     secureTextEntry={true}
                 />
-                {loading ? (
-                    <ActivityIndicator size="large" color="#0000ff" />
-                ) : (
-                    <>
-                        <Button title="Login" onPress={signIn} />
-                        <Button title="Create Account" onPress={signUp} />
-                        <Button title="Sign Out" onPress={signOut} />
-                    </>
-                )}
+                <View style={styles.buttonContainer}>
+                    <Button title="Sign Up" onPress={signUp} />
+                    <Button title="Sign In" onPress={signIn} />
+                    <Button title="Sign Out" onPress={logout} />
+                </View>
+                {loading && <ActivityIndicator size="large" color="#0000ff" />}
             </KeyboardAvoidingView>
         </View>
     );
@@ -97,5 +107,10 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         padding: 10,
         backgroundColor: '#fff'
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
     }
 });

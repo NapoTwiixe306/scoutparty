@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "./FirebaseConfig";
 
 import Home from "./app/Home/Home";
 import CreateEvent from "./app/CreateEvent/CreateEvent";
@@ -15,24 +13,6 @@ import Login from "./app/Login/Login";
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const subscriber = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      setUser(user);
-      if (initializing) setInitializing(false);
-    });
-    return subscriber; // unsubscribe on unmount
-  }, [initializing]);
-
-  if (initializing) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
 
   return (
     <>
@@ -42,28 +22,13 @@ export default function App() {
           initialRouteName="Home"
           screenOptions={{
             cardStyle: { backgroundColor: "#2B3639" },
+            headerShown: false,
           }}
         >
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="CreateEvent"
-            component={user ? CreateEvent : Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Settings"
-            component={Settings}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="CreateEvent" component={CreateEvent} />
+          <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
         <BottomBar />
       </NavigationContainer>
