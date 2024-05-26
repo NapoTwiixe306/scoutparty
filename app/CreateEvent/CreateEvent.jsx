@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HotParty from '../../src/components/Party/Party';
-import { Picker } from '@react-native-picker/picker'; // Importer le Picker depuis le package @react-native-picker/picker
 
 export default function CreateEvent() {
   const [parties, setParties] = useState([]);
   const [newPartyTitle, setNewPartyTitle] = useState('');
   const [newPartyText, setNewPartyText] = useState('');
-  const [newPartyType, setNewPartyType] = useState('publique'); // Valeur par défaut
+  const [newPartyType, setNewPartyType] = useState('publique'); 
 
   useEffect(() => {
     const loadParties = async () => {
@@ -37,7 +36,7 @@ export default function CreateEvent() {
       await AsyncStorage.setItem('parties', JSON.stringify(updatedParties));
       setNewPartyTitle('');
       setNewPartyText('');
-      setNewPartyType('publique'); // Réinitialiser à la valeur par défaut
+      setNewPartyType('publique'); 
     } else {
       console.log('Please fill out all fields');
     }
@@ -69,21 +68,36 @@ export default function CreateEvent() {
               onChangeText={(text) => setNewPartyText(text)}
               value={newPartyText}
             />
-            <Picker
-              selectedValue={newPartyType}
-              style={styles.input}
-              onValueChange={(itemValue) => setNewPartyType(itemValue)}
-            >
-              <Picker.Item label="Publique" value="publique" />
-              <Picker.Item label="Privée" value="privé" />
-              <Picker.Item label="Restreint" value="restreint" />
-            </Picker>
+
+            <View style={styles.radioContainer}>
+              <TouchableOpacity
+                style={styles.radioButton}
+                onPress={() => setNewPartyType('publique')}
+              >
+                <View style={newPartyType === 'publique' ? styles.radioButtonSelected : styles.radioButtonUnselected} />
+                <Text style={styles.radioText}>Publique</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.radioButton}
+                onPress={() => setNewPartyType('privé')}
+              >
+                <View style={newPartyType === 'privé' ? styles.radioButtonSelected : styles.radioButtonUnselected} />
+                <Text style={styles.radioText}>Privée</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.radioButton}
+                onPress={() => setNewPartyType('restreint')}
+              >
+                <View style={newPartyType === 'restreint' ? styles.radioButtonSelected : styles.radioButtonUnselected} />
+                <Text style={styles.radioText}>Restreint</Text>
+              </TouchableOpacity>
+            </View>
+
             <TouchableOpacity style={styles.button} onPress={handleCreateParty}>
               <Text style={styles.buttonText}>Créer la soirée</Text>
             </TouchableOpacity>
           </View>
 
-          
         </View>
       </ScrollView>
     </View>
@@ -113,6 +127,34 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     borderRadius: 5
+  },
+  radioContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20
+  },
+  radioButton: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  radioButtonUnselected: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginRight: 10
+  },
+  radioButtonSelected: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    backgroundColor: 'blue',
+    marginRight: 10
+  },
+  radioText: {
+    fontSize: 16,
+    color: 'black'
   },
   button: {
     backgroundColor: 'blue',

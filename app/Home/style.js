@@ -46,6 +46,52 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
+    modalView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: 20,
+      },
+      modalText: {
+        fontSize: 20,
+        marginBottom: 20,
+        color: 'white',
+      },
+      radioButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 15,
+      },
+      radioButtonUnselected: {
+        height: 20,
+        width: 20,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'white',
+        marginRight: 10,
+      },
+      radioButtonSelected: {
+        height: 20,
+        width: 20,
+        borderRadius: 10,
+        backgroundColor: 'blue',
+        marginRight: 10,
+      },
+      radioText: {
+        fontSize: 18,
+        color: 'white',
+      },
+      closeButton: {
+        marginTop: 20,
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+      },
+      buttonText: {
+        color: 'white',
+        fontSize: 16,
+      },
 });
   
 export default styles;
