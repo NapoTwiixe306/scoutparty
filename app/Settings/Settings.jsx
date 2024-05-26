@@ -1,23 +1,30 @@
-import React, { Component } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import React from 'react';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function Home()  {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}> Settings </Text>
-      </View>
-    )
+export default function Home({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Settings</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.link}>Login</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-    text: {
-      padding: 30,
-      color: "white"
-    },
-  });
-  
+  text: {
+    padding: 30,
+    color: 'white'
+  },
+  link: {
+    marginTop: 20,
+    color: 'blue',
+    textDecorationLine: 'underline'
+  }
+});
