@@ -1,67 +1,46 @@
-import React, { useState, useEffect, useFocusEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import HotParty from '../../src/components/Party/Party';
 
 export default function CreateEvent() {
+  const [parties, setParties] = useState([]);
   const [newPartyTitle, setNewPartyTitle] = useState('');
   const [newPartyText, setNewPartyText] = useState('');
-  const [newPartyType, setNewPartyType] = useState('publique');
-  const [userId, setUserId] = useState(null); // State to store user ID
+  const [newPartyType, setNewPartyType] = useState('publique'); 
 
   useEffect(() => {
-    const loadUserId = async () => {
+    const loadParties = async () => {
       try {
-        const storedUserId = await AsyncStorage.getItem('userId');
-        if (storedUserId) {
-          setUserId(storedUserId);
-        } else {
-          console.error('User ID not found');
+        const storedParties = await AsyncStorage.getItem('parties');
+        if (storedParties) {
+          setParties(JSON.parse(storedParties));
         }
       } catch (error) {
-        console.error('Failed to load user ID:', error);
+        console.error('Failed to load parties', error);
       }
     };
 
-    loadUserId();
+    loadParties();
   }, []);
 
   const handleCreateParty = async () => {
-    if (newPartyTitle && newPartyText && newPartyType && userId) {
-      try {
-        const response = await fetch('http://192.168.0.20:5000/create-event', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userId}` // Sending user ID with authorization header
-          },
-          body: JSON.stringify({
-            title: newPartyTitle,
-            text: newPartyText,
-            type: newPartyType
-          }),
-        });
-        if (response.ok) {
-          console.log('Event created successfully');
-          setNewPartyTitle('');
-          setNewPartyText('');
-          setNewPartyType('publique');
-        } else {
-          console.error('Failed to create event');
-        }
-      } catch (error) {
-        console.error('Error creating event:', error);
-      }
+    if (newPartyTitle && newPartyText && newPartyType) {
+      const newParty = {
+        title: newPartyTitle,
+        text: newPartyText,
+        type: newPartyType
+      };
+      const updatedParties = [...parties, newParty];
+      setParties(updatedParties);
+      await AsyncStorage.setItem('parties', JSON.stringify(updatedParties));
+      setNewPartyTitle('');
+      setNewPartyText('');
+      setNewPartyType('publique'); 
     } else {
-      console.log('Please fill out all fields or User ID not found');
+      console.log('Please fill out all fields');
     }
   };
-  
-  
-  
-  
-
 
   const handleDeleteParty = async (index) => {
     const updatedParties = [...parties];
@@ -69,7 +48,6 @@ export default function CreateEvent() {
     setParties(updatedParties);
     await AsyncStorage.setItem('parties', JSON.stringify(updatedParties));
   };
-
 
   return (
     <View style={{ flex: 1 }}>
@@ -123,7 +101,7 @@ export default function CreateEvent() {
         </View>
       </ScrollView>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({

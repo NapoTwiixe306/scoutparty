@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -16,7 +15,6 @@ export default function TopBar() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.logoContainer}>
-          {/* Logo component if any */}
         </View>
         <View style={styles.dateContainer}>
           <Text style={styles.dateText}>Adresse</Text>
