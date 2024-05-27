@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import HotParty from '../../src/components/Party/Party';
 
 export default function CreateEvent() {
   const [parties, setParties] = useState([]);

@@ -32,6 +32,9 @@ const styles = StyleSheet.create({
 
   },
   option: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 50
   },
   optionText: {
