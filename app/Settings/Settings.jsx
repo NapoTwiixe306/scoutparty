@@ -1,12 +1,28 @@
 import React, {useState, useEffect} from 'react';
 import { Text, View, TouchableOpacity, TextInput, Platform, Keyboard } from 'react-native';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
+import { useNavigation } from "@react-navigation/native";
 
 import styles from './style';
 
-export default function Home({ navigation }) {
+export default function Home({}) {
+  const navigation = useNavigation();
+
   const [searchText, setSearchText] = useState('');
 
+  const [activeIcon, setActiveIcon] = useState(null);
+  const [iconPosition, setIconPosition] = useState(0);
+
+  const handleIconPress = (iconName) => {
+    if (activeIcon === iconName) {
+      setActiveIcon(null);
+      setIconPosition(0); // Reset icon position
+    } else {
+      setActiveIcon(iconName);
+      setIconPosition(10); 
+    }
+    navigation.navigate(iconName);
+  };
 
   const handleSearch = () => {
     console.log('Recherche:', searchText);
@@ -42,22 +58,19 @@ export default function Home({ navigation }) {
       </View>
       <View style={styles.choice}>
         <View style={styles.items}>
-          <TouchableOpacity style={styles.option}>
-            <Icon name="arrow-right" size={20} color="white" />
+          <TouchableOpacity style={styles.option}  onPress={() => handleIconPress("Profile")}>
+            <Icon name="arrow-right" size={20} color="white"/>
             <Text style={styles.optionText}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
+          <TouchableOpacity style={styles.option}  onPress={() => handleIconPress("Theme")}>
             <Icon name="arrow-right" size={20} color="white" />
             <Text style={styles.optionText}>Theme</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
+          <TouchableOpacity style={styles.option}  onPress={() => handleIconPress("General")}>
             <Icon name="arrow-right" size={20} color="white" />
-            <Text style={styles.optionText}>Langue</Text>
+            <Text style={styles.optionText}>General</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option}>
-            <Icon name="arrow-right" size={20} color="white" />
-            <Text style={styles.optionText}>Notification</Text>
-          </TouchableOpacity>
+     
           <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.option}>
             <Icon name="arrow-right" size={20} color="white" />
             <Text style={styles.optionText}>Login</Text>
