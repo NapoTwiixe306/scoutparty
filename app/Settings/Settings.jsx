@@ -43,8 +43,17 @@ export default function Home({}) {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        <View style={styles.profile}></View>
+      <View style={styles.avatarContainer}>
+        <View style={styles.avatar}>
+          <Text style={styles.textAvatar}>Add Picture</Text>
+        </View>
+        <View style={styles.rightInfos}>
+            <Text style={styles.infosText}>Prénom : </Text>
+            <Text style={styles.infosText}>Email : </Text>
+        </View>
       </View>
+      <View style={styles.separator}/>
+    </View>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.input}
@@ -58,10 +67,7 @@ export default function Home({}) {
       </View>
       <View style={styles.choice}>
         <View style={styles.items}>
-          <TouchableOpacity style={styles.option}  onPress={() => handleIconPress("Profile")}>
-            <Icon name="arrow-right" size={20} color="white"/>
-            <Text style={styles.optionText}>Profile</Text>
-          </TouchableOpacity>
+          
           <TouchableOpacity style={styles.option}  onPress={() => handleIconPress("Theme")}>
             <Icon name="arrow-right" size={20} color="white" />
             <Text style={styles.optionText}>Theme</Text>
@@ -70,7 +76,6 @@ export default function Home({}) {
             <Icon name="arrow-right" size={20} color="white" />
             <Text style={styles.optionText}>General</Text>
           </TouchableOpacity>
-     
           <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.option}>
             <Icon name="arrow-right" size={20} color="white" />
             <Text style={styles.optionText}>Login</Text>
