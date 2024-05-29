@@ -4,7 +4,6 @@ import Icon from "react-native-vector-icons/SimpleLineIcons";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as FileSystem from 'expo-file-system';
 
 import styles from './style';
 
@@ -34,7 +33,7 @@ export default function Home({}) {
   const handleIconPress = (iconName) => {
     if (activeIcon === iconName) {
       setActiveIcon(null);
-      setIconPosition(0); 
+      setIconPosition(0); // Reset icon position
     } else {
       setActiveIcon(iconName);
       setIconPosition(10); 
@@ -59,16 +58,8 @@ export default function Home({}) {
     }
   };
 
-  const convertImageToBase64 = async (uri) => {
-    try {
-      const base64Image = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      return base64Image;
-    } catch (error) {
-      console.error('Error converting image to base64:', error);
-      return null;
-    }
+  const selectImage = async () => {
+    alert("Cette fonctionnalité n'est pas encore disponible")
   };
 
   const saveAvatarToStorage = async (base64Image) => {
@@ -79,46 +70,18 @@ export default function Home({}) {
     }
   };
 
-  const selectImage = async () => {
-    try {
-      if (avatarSource) {
-        alert("Fonctionnalité non disponible pour le moment.");
-      } else {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  
-        if (status !== 'granted') {
-          alert('Permission to access media library is required!');
-          return;
-        }
-  
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-  
-        console.log(result); // Log the result to debug
-  
-        if (!result.cancelled) {
-          try {
-            const base64Image = await convertImageToBase64(result.uri);
-            if (base64Image) {
-              setAvatarSource({ uri: `data:image/jpeg;base64,${base64Image}` });
-              await saveAvatarToStorage(base64Image); // Sauvegarder la nouvelle image dans le stockage local
-            } else {
-              console.error('Error converting image to base64: Base64 image is null');
-            }
-          } catch (error) {
-            console.error('Error converting image to base64:', error);
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Error requesting permissions:', error);
-    }
+  const convertImageToBase64 = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const base64Image = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+    return base64Image.split(',')[1];
   };
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
